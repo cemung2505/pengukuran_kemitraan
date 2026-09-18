@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instrumen Pengukuran Kampus Berdampak</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="kampus_berdampak_app.css">
+</head>
+<body class="min-h-screen flex flex-col">
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 text-white p-2 rounded-lg">
+                    <i class="fa-solid fa-building-columns text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-900 leading-tight">Kampus Berdampak</h1>
+                    <p class="text-xs text-gray-500">Instrumen Pengukuran Kemitraan Prodi</p>
+                </div>
+            </div>
+            <div class="hidden sm:block text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full" id="header-progress-text">
+                Persiapan
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
+        <div id="progress-container" class="mb-8 hidden">
+            <div class="flex justify-between mb-2 text-xs font-semibold text-indigo-600" id="progress-labels"></div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500 ease-out"></div>
+            </div>
+        </div>
+
+        <div id="app-content" class="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 sm:p-8 fade-in min-h-[500px]">
+            <div class="text-center py-12">
+                <i class="fa-solid fa-clipboard-check text-6xl text-indigo-200 mb-6"></i>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Pengukuran Kemitraan Prodi</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto mb-8">
+                    Selamat datang di instrumen pengukuran kemitraan menuju Kampus Berdampak.
+                    Terdapat 45 indikator yang terbagi dalam 5 dimensi. Pilihlah kondisi yang paling mencerminkan aktual di Program Studi Anda.
+                </p>
+                <div class="max-w-xl mx-auto mb-8 text-left">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Identitas Pengisi</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <label class="block">
+                            <span class="text-sm font-medium text-gray-700">Nama</span>
+                            <input id="user-name" type="text" autocomplete="name" class="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none" placeholder="Masukkan nama lengkap">
+                        </label>
+                        <label class="block">
+                            <span class="text-sm font-medium text-gray-700">Program Studi</span>
+                            <input id="user-study-program" type="text" class="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none" placeholder="Masukkan program studi">
+                        </label>
+                        <label class="block">
+                            <span class="text-sm font-medium text-gray-700">Instansi PT</span>
+                            <input id="user-institution" type="text" class="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none" placeholder="Masukkan nama perguruan tinggi">
+                        </label>
+                    </div>
+                    <p id="identity-error" class="hidden mt-3 text-sm text-red-600">Mohon lengkapi Nama, Program Studi, dan Instansi PT.</p>
+                </div>
+                <div class="bg-blue-50 text-blue-800 p-4 rounded-lg inline-block text-left mb-8 text-sm">
+                    <h4 class="font-bold mb-2"><i class="fa-solid fa-circle-info mr-2"></i>Skala Penilaian:</h4>
+                    <ul class="list-disc list-inside space-y-1 ml-2">
+                        <li><strong>1</strong> = Belum Memenuhi / Tidak Ada</li>
+                        <li><strong>2</strong> = Kurang Memenuhi / Terbatas (Tahap Awal)</li>
+                        <li><strong>3</strong> = Cukup Memenuhi / Berjalan Baik (Tahap Implementasi)</li>
+                        <li><strong>4</strong> = Sangat Memenuhi / Optimal (Integrasi Penuh)</li>
+                    </ul>
+                </div>
+                <br>
+                <button id="btn-start" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center mx-auto gap-2 text-lg">
+                    Mulai Pengisian <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="bottom-nav" class="hidden sticky bottom-4 mt-8 bg-white/90 backdrop-blur-md shadow-lg border border-gray-200 rounded-2xl p-4 flex justify-between items-center z-40">
+            <button id="btn-prev" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                <i class="fa-solid fa-chevron-left"></i> Kembali
+            </button>
+            <div class="text-sm font-medium text-gray-500" id="step-indicator">Dimensi 1 dari 5</div>
+            <button id="btn-next" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                Selanjutnya <i class="fa-solid fa-chevron-right"></i>
+            </button>
+            <button id="btn-submit" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-6 py-2 rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                Lihat Hasil <i class="fa-solid fa-flag-checkered"></i>
+            </button>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-auto py-6">
+        <div class="max-w-5xl mx-auto px-4 text-center text-sm text-gray-400">
+            &copy; 2026 Instrumen Pengukuran Kemitraan Menuju Kampus Berdampak.
+        </div>
+    </footer>
+
+    <script src="kampus_berdampak_app.js"></script>
+</body>
+</html>
